@@ -1,0 +1,11 @@
+version: '2'
+services:
+  postfix:
+    image: mrlesmithjr/postfix:latest
+    ports:
+      - "25:25"
+    restart: always
+    environment:
+      POSTFIX_MYNETWORKS: "127.0.0.0/8 192.168.0.0/16 172.16.0.0/12 10.0.0.0/8"
+      POSTFIX_RELAYHOST: "smtp.example.org"
+      POSTFIX_REWRITE_DOMAIN: "example.com"
