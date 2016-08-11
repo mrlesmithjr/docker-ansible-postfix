@@ -1,0 +1,32 @@
+---
+- hosts: localhost
+  connection: local
+  become: true
+  vars:
+    postfix_domain_rewrite_filetype: 'hash'
+  roles:
+  tasks:
+    - name: Configuring Postfix 'main.cf'
+      template:
+        src: "./main.cf.j2"
+        dest: "{{ postfix_conf_dir }}/main.cf"
+        owner: "root"
+        group: "root"
+        mode: 0644
+      register: postfix
+
+    - name: Configuring Postfix 'generic'
+      template:
+        src: "./generic.j2"
+        dest: "{{ postfix_conf_dir }}/generic"
+        owner: "root"
+        group: "root"
+        mode: 0644
+      register: postfix
+      when: postfix_rewrite_domain is defined
+
+    - name: Rebuilding generic.db
+      command: "postmap {{ postfix_conf_dir }}/generic"
+      when: >
+            postfix.changed and
+            postfix_domain_rewrite_filetype == 'hash'
