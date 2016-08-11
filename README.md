@@ -1,6 +1,6 @@
 Repo Info
 =========
-Builds a [Docker] mail relay server using [Postfix] provision using [Ansible].
+Builds a [Docker] mail relay server image using [Postfix] provisioned using [Ansible].
 
 Usage
 -----
@@ -12,8 +12,8 @@ mrlesmithjr/postfix
 ```
 Variables
 ---------
-`POSTFIX_RELAYHOST` - Define a relay host if required
-`POSTFIX_REWRITE_DOMAIN` - Define your rewrite domain if required
+`POSTFIX_RELAYHOST` - Define a relay host if required  
+`POSTFIX_REWRITE_DOMAIN` - Define your rewrite domain if required  
 `POSTFIX_MYNETWORKS=127.0.0.0/8` - Networks to allow relaying from
 
 Notes
