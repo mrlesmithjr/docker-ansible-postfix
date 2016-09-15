@@ -1,26 +1,19 @@
-FROM ubuntu:14.04
+FROM mrlesmithjr/alpine-ansible
 
 MAINTAINER Larry Smith Jr. <mrlesmithjr@gmail.com>
 
-# Update apt-cache
-RUN apt-get update
+# Copy Ansible Related Files
+COPY config/ansible/ /
 
-# Install Ansible
-RUN apt-get -y install git software-properties-common && \
-    apt-add-repository ppa:ansible/ansible && \
-    apt-get update && \
-    apt-get -y install ansible
+RUN ansible-playbook -i "localhost," -c local /playbook.yml && \
+    rm -rf /tmp/* && \
+    rm -rf /var/cache/apk/*
 
-# Copy Ansible related files
-COPY Ansible/ /
+# Copy Docker Entrypoint
+COPY docker-entrypoint.sh /
+RUN chmod +x /docker-entrypoint.sh
 
-# Run Ansible playbook
-RUN ansible-playbook -i "localhost," -c local /playbook.yml
-
-# Cleanup
-RUN apt-get -y clean && \
-    apt-get -y autoremove && \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+ENTRYPOINT ["/docker-entrypoint.sh"]
 
 ENV POSTFIX_CONF_DIR="/etc/postfix" \
     POSTFIX_MYNETWORKS="127.0.0.0/8"
@@ -28,12 +21,7 @@ ENV POSTFIX_CONF_DIR="/etc/postfix" \
 # Setup volumes
 VOLUME ["/var/lib/postfix", "/var/mail", "/var/spool/postfix"]
 
+COPY config/supervisord/*.ini /etc/supervisor.d/
+
 # Expose ports
 EXPOSE 25
-
-# Copy entrypoint script and make executable
-COPY docker-entrypoint.sh /usr/local/bin
-RUN chmod +x /usr/local/bin/docker-entrypoint.sh
-
-# Container start-up
-CMD ["docker-entrypoint.sh"]
