@@ -1,7 +1,7 @@
 version: '2'
 services:
   postfix:
-    image: mrlesmithjr/postfix:latest
+    image: mrlesmithjr/postfix:alpine
     ports:
       - "25:25"
     restart: always
