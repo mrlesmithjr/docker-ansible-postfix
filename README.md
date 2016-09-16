@@ -1,6 +1,7 @@
 Repo Info
 =========
-Builds a [Docker] mail relay server image using [Postfix] provisioned using [Ansible].
+Builds a [Docker] mail relay server image using [Postfix] provisioned using [Ansible].  
+Based on Alpine Linux.
 
 Usage
 -----
@@ -8,7 +9,7 @@ Usage
 docker run -d -p 25:25 -e POSTFIX_REWRITE_DOMAIN=example.com \
 -e POSTFIX_RELAYHOST=smtp.example.org \
 -e POSTFIX_MYNETWORKS="127.0.0.0/8 192.168.0.0/16 172.16.0.0/12 10.0.0.0/8" \
-mrlesmithjr/postfix
+mrlesmithjr/postfix:alpine
 ```
 Variables
 ---------
